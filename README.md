@@ -3,3 +3,5 @@ Allergenix, the AI-driven Allergen Detection App is designed to help people avoi
 
 
 Using Bert-transfomer model predict the allergy
+
+now perform on mutilevel Classifications using BERT
