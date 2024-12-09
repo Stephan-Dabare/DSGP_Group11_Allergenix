@@ -1,0 +1,40 @@
+Overview
+This repository contains data and supporting files for a multi-label allergy prediction model. The files included are:
+
+final_dataset.csv: The cleaned and processed dataset containing combined text features (ingredients_text and additives_en) and binary-encoded labels for various allergens.
+mlb.pkl: A serialized MultiLabelBinarizer object used for encoding and decoding the multi-label allergy classification data.
+
+
+File Descriptions
+1. final_dataset.csv
+  Purpose:
+  This file is the primary dataset used to train, validate, and test a BERT-based model for allergy prediction. It combines the ingredients and additives of food items into a single text field (combined_text) and includes binary-encoded allergy labels.
+
+Structure:
+  The dataset contains the following columns:
+
+    combined_text: A string field that combines ingredients_text and additives_en. This serves as the input feature for the model.
+    [Allergen Labels]: Binary columns, where each column corresponds to a specific allergen (e.g., Nut Allergy, Gluten Allergy, etc.).
+    1: Indicates the allergen is present.
+    0: Indicates the allergen is absent.
+
+2. mlb.pkl
+  Purpose:
+  This file contains the serialized MultiLabelBinarizer object used for encoding and decoding the multi-label allergy data.
+
+Description:
+
+  The MultiLabelBinarizer is a scikit-learn utility that transforms a list of allergy labels into a binary format and vice versa.
+  During training, the mlb was fitted to the list of unique allergen classes extracted from the original dataset.
+  This ensures consistency between the training and inference phases when handling allergy labels.
+
+
+Dependencies
+Ensure the following Python libraries are installed:
+    pandas
+    numpy
+    scikit-learn
+    pickle
+
+Install missing dependencies using pip:
+      pip install pandas numpy scikit-learn
