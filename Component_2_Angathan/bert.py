@@ -7,29 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1vlmbF4OepjyKybZKK_-TIEKOMlWltHR8
 """
 
-# Save the fine-tuned model
-model.save_pretrained('./allergy_bert_model')
-
-# Function to make predictions
-def predict_allergy(text):
-    encoding = tokenizer(
-        text,
-        max_length=128,
-        padding='max_length',
-        truncation=True,
-        return_tensors='pt'
-    )
-    input_ids = encoding['input_ids']
-    attention_mask = encoding['attention_mask']
-    outputs = model(input_ids, attention_mask=attention_mask)
-    preds = torch.argmax(outputs.logits, dim=1).item()
-    return label_encoder.inverse_transform([preds])[0]
-
-# Test the prediction function
-example_text = "Sugar, wheat flour, vegetable oils, milk powder, cocoa"
-predicted_allergy = predict_allergy(example_text)
-print("Predicted Allergy:", predicted_allergy)
-
 import pandas as pd
 import torch
 from sklearn.model_selection import train_test_split
@@ -110,6 +87,20 @@ test_texts = test_texts.tolist()    # Ensure it is a Python list
 train_labels = train_labels.tolist()  # Ensure it is a Python list
 test_labels = test_labels.tolist()    # Ensure it is a Python list
 
+import os
+from transformers import BertForSequenceClassification, BertTokenizer, Trainer, TrainingArguments
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
+# Disable W&B logging if not required
+os.environ["WANDB_DISABLED"] = "true"
+
+# Load the tokenizer and model
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+num_labels = len(label_encoder.classes_)  # Ensure label_encoder is correctly loaded
+model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=num_labels)
+
+# Prepare datasets
 train_dataset = AllergyDataset(
     texts=train_texts,
     labels=train_labels,
@@ -124,7 +115,32 @@ eval_dataset = AllergyDataset(
     max_length=128
 )
 
-# Fine-tune the model
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir="./results",          # Directory to save model checkpoints
+    num_train_epochs=3,              # Number of training epochs
+    per_device_train_batch_size=16,  # Batch size per device during training
+    per_device_eval_batch_size=64,   # Batch size for evaluation
+    warmup_steps=500,                # Number of warmup steps for learning rate scheduler
+    weight_decay=0.01,               # Strength of weight decay
+    logging_dir='./logs',            # Directory for storing logs
+    logging_steps=10,
+)
+
+# Define metric computation
+def compute_metrics(pred):
+    labels = pred.label_ids
+    preds = pred.predictions.argmax(-1)
+    precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='weighted')
+    acc = accuracy_score(labels, preds)
+    return {
+        'accuracy': acc,
+        'f1': f1,
+        'precision': precision,
+        'recall': recall
+    }
+
+# Fine-tune the model using Hugging Face's Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -134,6 +150,7 @@ trainer = Trainer(
     compute_metrics=compute_metrics
 )
 
+# Train the model
 trainer.train()
 
 # Fine-tune the model
@@ -171,6 +188,11 @@ with open('mlb.pkl', 'wb') as f:
 
 import numpy as np
 
+# Assuming 'model' and 'sample_tokenized' are defined from previous cells
+with torch.no_grad():
+    outputs = model(**sample_tokenized)  # Get model outputs
+    predicted_class = torch.argmax(outputs.logits, dim=1).item()  # Get the predicted class index
+
 # Convert predicted_class into a properly shaped NumPy array
 predicted_array = np.zeros((1, len(mlb.classes_)))  # Create an array with the same number of classes
 predicted_array[0, predicted_class] = 1  # Set the predicted class to 1 (one-hot encoded)
@@ -179,43 +201,32 @@ predicted_array[0, predicted_class] = 1  # Set the predicted class to 1 (one-hot
 predicted_allergy = mlb.inverse_transform(predicted_array)
 print(f"Predicted Allergy Type: {predicted_allergy}")
 
-import numpy as np
-from transformers import BertTokenizer
-import torch
-
-# Define the prediction function
-def predict_allergy(input_text):
-    # Preprocess the input text
-    inputs = tokenizer(
-        input_text,
-        padding=True,
+def predict_allergy(text, model, tokenizer, mlb, device, threshold=0.5):
+    """
+    Predict allergens for a given text.
+    """
+    encoding = tokenizer.encode_plus(
+        text,
+        add_special_tokens=True,
+        max_length=512,
+        return_token_type_ids=False,
+        padding='max_length',
         truncation=True,
-        max_length=128,
-        return_tensors="pt"
+        return_attention_mask=True,
+        return_tensors='pt',
     )
 
-    # Move inputs to the same device as the model
-    inputs = {key: val.to(model.device) for key, val in inputs.items()}
+    input_ids = encoding['input_ids'].to(device)
+    attention_mask = encoding['attention_mask'].to(device)
 
-    # Get predictions
-    model.eval()
     with torch.no_grad():
-        outputs = model(**inputs)
+        outputs = model(input_ids=input_ids, attention_mask=attention_mask)
         logits = outputs.logits
-        predicted_class = torch.argmax(logits, dim=1).item()  # Get the class with the highest score
+        probs = torch.sigmoid(logits).cpu().numpy()[0]
 
-    # Convert predicted_class into a properly shaped NumPy array
-    predicted_array = np.zeros((1, len(mlb.classes_)))  # Create an array with the same number of classes
-    predicted_array[0, predicted_class] = 1  # Set the predicted class to 1 (one-hot encoded)
-
-    # Decode the predicted class to allergy type(s)
-    predicted_allergy = mlb.inverse_transform(predicted_array)
-    return predicted_allergy
-
-# Example usage
-test_input = "Milk powder, soy lecithin, wheat flour"
-predicted_allergy = predict_allergy(test_input)
-print(f"Predicted Allergy Type: {predicted_allergy}")
+    # Apply threshold to get predicted allergies
+    predicted_allergies = [mlb.classes_[i] for i, prob in enumerate(probs) if prob >= threshold]
+    return predicted_allergies
 
 from sklearn.metrics import accuracy_score, hamming_loss, precision_recall_fscore_support
 import numpy as np
@@ -279,16 +290,69 @@ print("Model Evaluation Metrics:")
 for metric, value in metrics.items():
     print(f"{metric}: {value:.4f}")
 
+import torch
+
+# Set device to GPU if available, otherwise use CPU
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+print(f"Using device: {device}")
+
+# Ensure test_labels is in the correct format
+print(f"First 5 entries of test_labels: {test_labels[:5]}")
+
+# Convert test_labels to a list of lists if necessary
+if isinstance(test_labels[0], int):
+    # Single-label integer format, map to class labels
+    test_labels_list = [[mlb.classes_[label]] for label in test_labels]
+elif isinstance(test_labels[0], str):
+    # Single-label string format, wrap in a list
+    test_labels_list = [[label] for label in test_labels]
+else:
+    # Assume test_labels is already in the correct list-of-lists format
+    test_labels_list = test_labels
+
+# Transform to binary matrix
+test_labels_binary = mlb.transform(test_labels_list)
+
+# Debugging output
+print(f"Shape of test_labels_binary: {test_labels_binary.shape}")
+
+import numpy as np
+
+# Convert integer labels to binary matrix
+num_classes = len(mlb.classes_)
+test_labels_binary = np.zeros((len(test_labels), num_classes), dtype=int)
+
+for i, label in enumerate(test_labels):
+    test_labels_binary[i, label] = 1
+
+print(f"Shape of test_labels_binary: {test_labels_binary.shape}")
+print("First 5 rows of test_labels_binary:")
+print(test_labels_binary[:5])
+
 # Generate predictions for the test set
 all_predictions = []
 
 for text in test_texts:
-    # Use the predict_allergy function to predict for each text
-    predicted_allergy = predict_allergy(text, model, tokenizer, mlb)
+    # Predict allergens for each test text
+    predicted_allergy = predict_allergy(text, model, tokenizer, mlb, device)
     all_predictions.append(predicted_allergy)
 
-# Convert predictions to the binary format expected by evaluation metrics
+# Convert predictions to binary format
 all_predictions_binary = mlb.transform(all_predictions)
+
+# Calculate metrics
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+precision = precision_score(test_labels_binary, all_predictions_binary, average='micro')
+recall = recall_score(test_labels_binary, all_predictions_binary, average='micro')
+f1 = f1_score(test_labels_binary, all_predictions_binary, average='micro')
+accuracy = accuracy_score(test_labels_binary, all_predictions_binary)
+
+# Print metrics
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
+print(f"F1 Score: {f1:.4f}")
+print(f"Accuracy: {accuracy:.4f}")
 
 # Inspect classes learned by MultiLabelBinarizer
 print("Classes in MultiLabelBinarizer:", mlb.classes_)
@@ -348,88 +412,3 @@ from sklearn.metrics import classification_report
 
 print("Classification Report:")
 print(classification_report(test_labels_binary_multilabel, filtered_predictions_binary, target_names=flattened_classes, zero_division=1))
-
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.metrics import classification_report
-from transformers import BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
-import torch
-
-# Load Dataset
-df = pd.read_csv('/content/all_rows (2).csv')  # Replace with your file path
-df['ingredients_text'] = df['ingredients_text'].astype(str)
-
-# Define Allergen Categories
-allergen_categories = ['Nut', 'Dairy', 'Gluten', 'Chemical', 'Seafood', 'Soy']  # Extend as needed
-mlb = MultiLabelBinarizer(classes=allergen_categories)
-
-# Assign Labels
-df['allergen_labels'] = df['allergen_text'].apply(lambda x: x.split(',') if pd.notna(x) else [])
-labels = mlb.fit_transform(df['allergen_labels'])
-
-# Tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-
-# Tokenize Inputs
-max_len = 128
-inputs = tokenizer(list(df['ingredients_text']), padding=True, truncation=True, max_length=max_len, return_tensors="pt")
-
-# Split Data
-train_texts, val_texts, train_labels, val_labels = train_test_split(
-    inputs, labels, test_size=0.2, random_state=42
-)
-
-# Prepare Dataset Class
-class AllergenDataset(torch.utils.data.Dataset):
-    def __init__(self, encodings, labels):
-        self.encodings = encodings
-        self.labels = labels
-
-    def __len__(self):
-        return len(self.labels)
-
-    def __getitem__(self, idx):
-        return {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}, torch.tensor(self.labels[idx])
-
-train_dataset = AllergenDataset(train_texts, train_labels)
-val_dataset = AllergenDataset(val_texts, val_labels)
-
-# Load Pre-trained BERT
-model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=len(allergen_categories))
-
-# Define Training Arguments
-training_args = TrainingArguments(
-    output_dir="./results",
-    evaluation_strategy="epoch",
-    save_strategy="epoch",
-    learning_rate=2e-5,
-    per_device_train_batch_size=8,
-    num_train_epochs=4,
-    weight_decay=0.01,
-    logging_dir="./logs",
-    logging_steps=10,
-    save_total_limit=2
-)
-
-# Define Trainer
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=val_dataset,
-    tokenizer=tokenizer,
-    compute_metrics=lambda p: classification_report(
-        p.label_ids, p.predictions.argmax(-1), target_names=allergen_categories, output_dict=True
-    )
-)
-
-# Train Model
-trainer.train()
-
-# Evaluate Model
-trainer.evaluate()
-
-# Save the Model
-model.save_pretrained("./allergen_bert_model")
-tokenizer.save_pretrained("./allergen_bert_model")
