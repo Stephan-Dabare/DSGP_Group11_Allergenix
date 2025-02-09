@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingredient Extractor</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Ingredient Extractor</h1>
+    <form id="uploadForm">
+      <input type="file" id="fileInput" accept="image/*" required>
+      <button type="submit">Upload</button>
+    </form>
+    <div id="output">
+      <h2>Results:</h2>
+      <div id="imageContainer"></div>
+      <div id="ingredients"></div>
+    </div>
+  </div>
+  <script src="/static/script.js"></script>
+</body>
+</html>
