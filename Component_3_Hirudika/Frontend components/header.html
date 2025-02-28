@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Header</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Bad+Script&family=Island+Moments&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Square+Peg&family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="header.css">
+
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
+
+    <header class="header">
+            <div class="top-bar">
+                <div class="header-icons">
+                    <a href="#">Sign In</a>
+                    <a href="#">Login</a>
+                </div>
+
+                <div class="logo-container">
+                    <img src="data/Logo_2_No_Bg.png" alt="Allerginix Logo" class="logo">
+                </div>
+
+
+                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Foods</a>
+                <a href="#">Cosmetics</a>
+                <a href="#">About us</a>
+
+            </nav>
+        </header>
+
+
+
+        <main class="container">
+
+            <section class="checker-box">
+                <div class="checker-content">
+
+                    <h1>Cosmetic Ingredient</h1>
+                    <h1> Analysis & Safety</h1>
+                    <br>
+
+                    <p class="c1">Analyze any cosmetic product in seconds.</p>
+                    <br>
+
+                    <br>
+                    <h3 class="c5">Take a Photo of Ingredients</h3>
+                    <p class="c2">Take a photo of the ingredient list straight from the product’s packaging.</p>
+
+
+                    <button class="upload-btn">Use Photo</button>
+                    <p class="tip"><i class="fas fa-info-circle"></i> Photo Tips & Tricks</p>
+
+                </div>
+
+                <div class="checker-image">
+                    <img src="data/new11.png" alt="Skin Care Product">
+                </div>
+            </section>
+
+
+
+
+            <div class="sections-container">
+                <section class="section-1">
+                    <h2 class="h2">Extract Ingredient List from Image</h2>
+                    <p class="c3">Upload a product label image, and our system will extract the ingredients for analysis.</p>
+                </section>
+
+                <section class="section-1">
+                    <h2 class="h2">Identify Allergens from Ingredients</h2>
+                    <p class="c3">Detect potential allergens in the ingredient list to ensure product safety.</p>
+                </section>
+
+                <section class="section-1">
+                    <h2 class="h2">Recommend Alternative Products</h2>
+                    <p class="c3">If a product contains allergens, we suggest safer alternatives that match your needs.</p>
+                </section>
+
+            </div>
+
+
+
+
+            <div class="sections-last">
+                <div class="image-content">
+                    <img src="data/new7.png" alt="Description">
+                </div>
+                <div class="text-content">
+                    <h2 class="h2_2">Why Analyze Cosmetic Ingredients?</h2>
+                    <br>
+                    <p class="c4">Analyzing cosmetic ingredients is essential for identifying potential allergens,
+                        harmful chemicals, and ensuring product safety. This knowledge empowers you to choose the
+                        right products for your skin, avoid unwanted reactions, and make informed decisions about what you apply.
+                        By understanding ingredient compositions, you can prioritize both safety and effectiveness in your skincare routine.</p>
+                </div>
+            </div>
+
+        </main>
+
+
+
+        <div id="photoTipsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 class="tips_h2">Photo Cropping Instructions</h2>
+                <ul>
+                    <li>Zoom in and crop out everything except the list of ingredients.</li>
+                    <li>If the list features "active ingredients," crop and analyze those separately.</li>
+                </ul>
+
+                <br>
+
+                <h3 class="tips_h3">Examples of a Good Photo</h3>
+                <!-- Good Photo Section -->
+                <div class="photo-container">
+                    <img src="data/good_image.png" alt="Good Photo" class="photo">
+                    <ul class="photo-list">
+                        <li>Zoom in</li>
+                        <li>Sharp focus</li>
+                        <li>Flat surface</li>
+                        <li>Straight and well cropped</li>
+                        <li>Bright lighting</li>
+                    </ul>
+                </div>
+
+                <h3 class="tips_h3">Examples of a Bad Photo</h3>
+
+                <!-- Bad Photo Section -->
+                <div class="photo-container">
+                    <img src="data/bad_image.png" alt="Bad Photo" class="photo">
+                    <ul class="photo-list">
+                        <li>Blurred</li>
+                        <li>Not flat</li>
+                        <li>Not straight</li>
+                        <li>Low contrast</li>
+                        <li>Dim lighting</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileUploader" accept="image/*" style="display: none;">
+
+    <!-- Image Cropping Modal -->
+    <div id="cropModal" class="popup-modal">
+        <div class="popup-content">
+            <span class="popup-close" onclick="hideCropModal()">&times;</span>
+            <h2>Adjust Your Image</h2>
+            <div class="crop-wrapper">
+                <img id="cropTarget">
+            </div>
+            <button id="confirmCrop">Crop & Proceed</button>
+        </div>
+    </div>
+
+    <!-- Cropped Image Display -->
+    <div id="croppedDisplay">
+        <h3>Processed Image:</h3>
+        <img id="croppedPreview">
+    </div>
+
+
+
+
+
+    <!-- Background Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Extracted Ingredients Section (Centered) -->
+    <section id="ingredientDisplay">
+        <span class="close-btn" onclick="closeIngredientDisplay()">&times;</span>
+
+        <h2 class="h2_in">Classified image as: <span class="h2_in" id="classificationText">cosmetic</span></h2>
+
+        <h2 class="h2_in_2">Extracted Ingredients</h2>
+
+
+
+        <!-- Ingredients Grid Container -->
+        <div id="ingredientContainer">
+            <ul id="ingredientList">
+
+
+
+
+
+            </ul>
+        </div>
+
+        <button id="allergenDetection">Detect Allergens</button>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="header.js"></script>
+    </body>
+</html>
