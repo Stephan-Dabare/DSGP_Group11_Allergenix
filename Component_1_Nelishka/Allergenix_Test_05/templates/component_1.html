@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergenix Tesseract</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/component_1_styles.css') }}">
+    <style>
+        .small-image {
+            width: 300px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <img src="{{ url_for('static', filename='img/Logo_2_No_Bg.png') }}" alt="Allergenix Logo" class="logo">
+    <nav class="nav">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Features</a>
+        <a href="#" class="nav-link">Contact</a>
+    </nav>
+    <div class="auth-buttons">
+        <button class="login-button">Login</button>
+        <button class="signup-button">Sign Up</button>
+    </div>
+</header>
+
+<div class="about-section-wrapper">
+    <section class="about-section">
+        <div class="box1">
+            <img src="{{ url_for('static', filename='img/box1.png') }}" alt="OCR Icon" class="icon">
+            <h3 class="box-title">Upload an Image</h3>
+            <p class="section-description">Choose a food package image and upload it. Our system will analyze the image for ingredient labels.</p>
+        </div>
+        <div class="box2">
+            <img src="{{ url_for('static', filename='img/box2.png') }}" alt="Analysis Icon" class="icon">
+            <h3 class="box-title">Detect Ingredient List</h3>
+            <p class="section-description">Our AI scans the image to check if it contains an ingredient list. If detected, it will extract the text for further analysis.</p>
+        </div>
+        <div class="box3">
+            <img src="{{ url_for('static', filename='img/box3.png') }}" alt="Recommendation Icon" class="icon">
+            <h3 class="box-title">Detect Allergens & Get Recommendations</h3>
+            <p class="section-description">Click the "Detect Allergen" button to analyze ingredients for potential allergens. Our system will also suggest alternative products if needed.</p>
+        </div>
+    </section>
+</div>
+
+<div class="container">
+    <section class="upload-section">
+        <h1>Upload an Image</h1>
+        <p>Detect allergens with ease.</p>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file" class="custom-file-upload">Choose Image</label>
+            <input type="file" name="file" id="file" class="styled-file-input" accept="image/*" required>
+            <span id="file-name">No file chosen</span>
+            <button type="submit">Upload Image</button>
+        </form>
+        <div id="loading" style="display: none;">
+            <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading..." class="loading-gif">
+        </div>
+    </section>
+
+    {% if ingredients and img_path %}
+    <div class="results-section">
+        <h1>Detected Ingredients</h1>
+        <p class="centered-text">
+            {% if ingredients %}
+            {% for ingredient in ingredients %}
+            {{ ingredient|capitalize }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            {% else %}
+            No ingredient list found.
+            {% endif %}
+        </p>
+        <h2>Processed Image</h2>
+        <div class="image-container">
+            <img src="{{ url_for('static', filename=img_path) }}" alt="Processed Image" class="processed-image small-image">
+        </div>
+        <button class="detect_btn">Detect Allergens</button>
+    </div>
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='scripts/component_1_scripts.js') }}"></script>
+</body>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="social-media">
+            <a href="#"><img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/x.png') }}" alt="X" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="social-icon"></a>
+        </div>
+        <img src="{{ url_for('static', filename='img/white%20Logo.png') }}" alt="Company Logo" class="footer-logo">
+        <div class="footer-buttons">
+            <button class="about-us-button">About Us</button>
+            <button class="contact-us-button">Contact Us</button>
+        </div>
+        <p class="copyright">© 2025 Allergenix. All rights reserved. | Country: Sri Lanka</p>
+    </div>
+</footer>
+</html>
