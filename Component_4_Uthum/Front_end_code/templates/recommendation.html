@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergenix Recommendations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home_styles.css') }}">
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- Header -->
+<header class="header">
+    <img src="{{ url_for('static', filename='img/Logo_2_No_Bg.png') }}" alt="Allergenix Logo" class="logo">
+    <nav class="nav">
+        <a href="{{ url_for('analysis') }}" class="nav-link">Home</a>
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Features</a>
+        <a href="#" class="nav-link">Contact</a>
+    </nav>
+    <div class="auth-buttons">
+        <button class="login-button">Login</button>
+        <button class="signup-button">Sign Up</button>
+    </div>
+</header>
+
+<!-- Main Section -->
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold text-center text-blue-500 mb-8">Product Recommendations</h1>
+
+    {% if not recommendations %}
+    <!-- Category Selection Form -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Select Categories for Recommendations</h2>
+
+        <div class="mb-4">
+            <label class="block font-medium text-gray-700 mb-2">Predicted Primary Category:</label>
+            <div class="p-3 bg-gray-100 rounded-md">{{ primary_category }}</div>
+        </div>
+
+        <form action="{{ url_for('get_recommendations') }}" method="post" id="categoryForm">
+            <input type="hidden" name="embedding" value="{{ embedding }}">
+            <input type="hidden" name="red_list" value="{{ red_list }}">
+            <input type="hidden" name="allergens" value="{{ allergens }}">
+            <input type="hidden" name="concerns" value="{{ concerns }}">
+            <input type="hidden" name="primary_category" value="{{ primary_category }}">
+
+            <div class="mb-4">
+                <label class="block font-medium text-gray-700 mb-2">Select Tertiary Categories:</label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                    {% for category in tertiary_categories %}
+                    <div class="category-option">
+                        <input type="checkbox" id="cat_{{ loop.index }}" name="tertiary_categories" value="{{ category }}" class="hidden category-checkbox">
+                        <label for="cat_{{ loop.index }}" class="block p-2 border border-gray-300 rounded-md text-center cursor-pointer hover:bg-blue-50 transition-colors">
+                            {{ category }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Get Recommendations
+                </button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <!-- Recommendations Display -->
+    <div class="space-y-8">
+        {% for product in recommendations %}
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-blue-600 mb-2">{{ product.name }}</h2>
+            <p class="text-lg font-medium mb-4">{{ product.brand }}</p>
+            <p class="text-gray-600 mb-2">Category: {{ product.category }}</p>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                {% if product.concerns.red_list.list != "None detected" %}
+                <div class="border-t-2 border-red-500 pt-2">
+                    <h3 class="font-bold text-red-500 mb-2">Highly Harmful Ingredients</h3>
+                    <p class="text-sm">{{ product.concerns.red_list.list }}</p>
+                </div>
+                {% endif %}
+
+                {% if product.concerns.allergens.list != "None detected" %}
+                <div class="border-t-2 border-orange-500 pt-2">
+                    <h3 class="font-bold text-orange-500 mb-2">Allergens</h3>
+                    <p class="text-sm">{{ product.concerns.allergens.list }}</p>
+                </div>
+                {% endif %}
+
+                {% if product.concerns.concerning_chemicals.list != "None detected" %}
+                <div class="border-t-2 border-yellow-500 pt-2">
+                    <h3 class="font-bold text-yellow-500 mb-2">Concerning Ingredients</h3>
+                    <p class="text-sm">{{ product.concerns.concerning_chemicals.list }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-center mt-8">
+            <a href="{{ url_for('analysis') }}" class="px-6 py-3 bg-gray-500 text-white font-medium rounded-md hover:bg-gray-700">
+                Back to Analysis
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Footer Section -->
+<footer class="footer bg-gray-800 text-white mt-8">
+    <div class="footer-content container mx-auto py-4 flex flex-col items-center space-y-4">
+        <div class="social-media flex space-x-4">
+            <a href="#"><img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/x.png') }}" alt="X" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="social-icon"></a>
+        </div>
+        <img src="{{ url_for('static', filename='img/white Logo.png') }}" alt="Company Logo" class="footer-logo">
+        <div class="footer-buttons flex space-x-4">
+            <button class="about-us-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">About Us</button>
+            <button class="contact-us-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Contact Us</button>
+        </div>
+        <p class="copyright text-sm">© 2025 Allergenix. All rights reserved. | Country: Sri Lanka</p>
+    </div>
+</footer>
+
+<!-- Include JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Make category buttons toggle when clicked
+    const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+    categoryCheckboxes.forEach(checkbox => {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                label.classList.add('bg-blue-100', 'border-blue-500');
+                label.classList.remove('border-gray-300');
+            } else {
+                label.classList.remove('bg-blue-100', 'border-blue-500');
+                label.classList.add('border-gray-300');
+            }
+        });
+    });
+
+    // Form validation
+    const categoryForm = document.getElementById('categoryForm');
+    if (categoryForm) {
+        categoryForm.addEventListener('submit', function(e) {
+            const selectedCategories = document.querySelectorAll('.category-checkbox:checked');
+            if (selectedCategories.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one category for recommendations.');
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
