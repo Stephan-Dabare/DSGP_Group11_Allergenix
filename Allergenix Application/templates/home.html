@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergenix - Detect Allergens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home_styles.css') }}">
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- Header -->
+<header class="header">
+    <img src="{{ url_for('static', filename='img/Logo_2_No_Bg.png') }}" alt="Allergenix Logo" class="logo">
+    <nav class="nav">
+        <a onclick="location.href='/'" class="nav-link">Home</a>
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Features</a>
+        <a href="#" class="nav-link">Contact</a>
+    </nav>
+    <div class="auth-buttons">
+    {% if 'user' in session %}
+        <a href="{{ url_for('logout') }}"><button class="logout-button">Logout</button></a>
+    {% else %}
+        <a href="{{ url_for('login') }}"><button class="login-button">Login</button></a>
+        <a href="{{ url_for('signup') }}"><button class="signup-button">Sign Up</button></a>
+    {% endif %}
+    </div>
+</header>
+
+<!-- Hero Section -->
+<div class="hero-section-wrapper">
+    <section class="hero-section">
+        <div class="hero-left">
+            <img src="{{ url_for('static', filename='img/Logo_2_No_Bg.png') }}" alt="Allergenix Logo" class="hero-logo animate-fade-in">
+            <h1 class="hero-title animate-slide-down">See Beyond the Label</h1>
+            <p class="hero-description animate-fade-in">Scan product labels instantly and uncover what’s inside your food and cosmetics. Our AI-powered system detects allergens, harmful chemicals, and suggests safer alternatives.</p>
+            <p class="hero-description2 animate-fade-in">So you can shop with <span class="highlight-allergen">confidence!</span></p>
+            <button class="get-started-button">Get Started</button>
+        </div>
+        <div class="hero-right">
+            <img src="{{ url_for('static', filename='img/hero.png') }}" alt="Allergy Image" class="hero-image animate-slide-right">
+        </div>
+    </section>
+</div>
+
+<!-- About Section -->
+<div class="about-section-wrapper">
+    <section class="about-section">
+        <div class="box1">
+            <img src="{{ url_for('static', filename='img/box1.png') }}" alt="OCR Icon" class="icon">
+            <h3 class="box-title">Deep Learning for Label Detection & Character Recognition</h3>
+            <p class="section-description">Our cutting-edge deep-learning models scans food labels with precision, extracting text even in tricky conditions.</p>
+        </div>
+        <div class="box2">
+            <img src="{{ url_for('static', filename='img/box2.png') }}" alt="Analysis Icon" class="icon">
+            <h3 class="box-title">Smart Ingredient Analysis & Allergen Detection</h3>
+            <p class="section-description">Instantly identify allergens and key ingredients with AI-powered analysis. Our system highlights potential risks, helping you make safe, informed choices.</p>
+        </div>
+        <div class="box3">
+            <img src="{{ url_for('static', filename='img/box3.png') }}" alt="Recommendation Icon" class="icon">
+            <h3 class="box-title">AI-Powered Alternative Recommendations</h3>
+            <p class="section-description">Need a better food and cosmetic option? Our AI suggests alternatives based on ingredients making healthier, allergy-friendly choices effortless.</p>
+        </div>
+    </section>
+</div>
+
+<!-- Food Allergen Detection Section -->
+<div class="food-section-wrapper">
+    <section class="food-allergen-section">
+        <img src="{{ url_for('static', filename='img/food.png') }}" alt="Food Allergen Detection" class="food-allergen-image animate-slide-left">
+        <div class="food-allergen-content">
+            <h2 class="section-title animate-fade-in">Food Allergen Detection</h2>
+            <p class="section-description">Our system scans food labels, extracts ingredients, and highlights allergens or harmful additives. Get clear insights and safer alternatives in second.</p>
+            <form action="{{ url_for('component_1') }}" method="get">
+                <button type="submit" class="learn-more-button">Detect Now</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<!-- Cosmetic Allergen Detection Section -->
+<div class="cosmetic-section-wrapper">
+    <section class="cosmetic-allergen-section">
+        <img src="{{ url_for('static', filename='img/cosmetic.png') }}" alt="Cosmetic Allergen Detection" class="cosmetic-allergen-image animate-slide-right">
+        <div class="cosmetic-allergen-content">
+            <h2 class="section-title animate-fade-in">Cosmetic Allergen Detection</h2>
+            <p class="section-description">Our system scans cosmetic labels, detects harmful chemicals, and helps you find safer alternatives. Make informed choices for healthier skin and hair.</p>
+            <form action="{{ url_for('component_3') }}" method="get">
+                <button type="submit" class="learn-more-button">Detect Now</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script src="{{ url_for('static', filename='scripts/home_scripts.js') }}"></script>
+</body>
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="social-media">
+            <a href="#"><img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/x.png') }}" alt="X" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="social-icon"></a>
+        </div>
+        <img src="{{ url_for('static', filename='img/whiteLogo.png') }}" alt="Company Logo" class="footer-logo">
+        <div class="footer-buttons">
+            <button class="about-us-button">About Us</button>
+            <button class="contact-us-button">Contact Us</button>
+        </div>
+        <p class="copyright">© 2025 Allergenix. All rights reserved. | Country: Sri Lanka</p>
+    </div>
+</footer>
+</html>
