@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergenix Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Bad+Script&family=Island+Moments&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Square+Peg&family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/component_4_styles.css') }}">
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+ <header class="header">
+            <div class="top-bar">
+                <div class="header-icons">
+                    <a href="#">Sign In</a>
+                    <a href="#">Login</a>
+                </div>
+
+                <div class="logo-container">
+                    <img src="static/data/Logo_2_No_Bg.png" alt="Allerginix Logo" class="logo">
+                </div>
+
+
+                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Foods</a>
+                <a href="#">Cosmetics</a>
+                <a href="#">About us</a>
+
+            </nav>
+ </header>
+
+<!-- Main Section -->
+<div class="container mx-auto py-8" >
+    <h1 class="text-3xl font-bold text-center text-blue-500 mb-8">Ingredient Analysis Results</h1>
+
+    <!-- Analysis Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-green-500 font-bold text-2xl">{{ results['analysis']['good_count'] }}</div>
+            <div class="text-sm">Safe Ingredients</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-red-500 font-bold text-2xl">{{ results['analysis']['high_risk_count'] }}</div>
+            <div class="text-sm">High Risk Ingredients</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-orange-500 font-bold text-2xl">{{ results['analysis']['average_risk_count'] }}</div>
+            <div class="text-sm">Asthmagens, Allergens, & Irritants</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-yellow-500 font-bold text-2xl">{{ results['analysis']['low_risk_count'] }}</div>
+            <div class="text-sm">Concerning Ingredients</div>
+        </div>
+    </div>
+
+    <!-- Visualization Section -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Ingredient Risk Distribution</h2>
+        <div class="visualization flex justify-center" id="visualization">
+            <img src="data:image/png;base64,{{ results['analysis']['chart_image'] }}" alt="Ingredient Analysis Chart" class="max-w-full">
+        </div>
+    </div>
+
+    <!-- Ingredient Lists Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {% if results['analysis']['red_list'] %}
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-bold text-red-500 mb-2">High Risk Ingredients</h3>
+            <ul class="list-disc list-inside text-sm">
+                {% for ingredient in results['analysis']['red_list'] %}
+                <li class="text-red-500">{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if results['analysis']['allergens'] %}
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-bold text-orange-500 mb-2">Asthmagens, Allergens, & Irritants</h3>
+            <ul class="list-disc list-inside text-sm">
+                {% for ingredient in results['analysis']['allergens'] %}
+                <li class="text-orange-500">{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if results['analysis']['concerns'] %}
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-bold text-yellow-500 mb-2">Concerning Ingredients</h3>
+            <ul class="list-disc list-inside text-sm">
+                {% for ingredient in results['analysis']['concerns'] %}
+                <li class="text-yellow-500">{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if results['analysis']['good_count'] > 0 %}
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-bold text-green-500 mb-2">Safe Ingredients</h3>
+            <ul class="list-disc list-inside text-sm">
+                {% for ingredient in results['analysis']['ingredients'] %}
+                    {% if ingredient not in results['analysis']['red_list'] and ingredient not in results['analysis']['allergens'] and ingredient not in results['analysis']['concerns'] %}
+                    <li class="text-green-500">{{ ingredient }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Get Alternative Product Button -->
+    <div class="text-center mt-8">
+        <form action="{{ url_for('recommendation') }}" method="post">
+            <!-- Pass all necessary data to the recommendation page -->
+            <input type="hidden" name="embedding" value='{{ results["analysis"]["embedding"] }}'>
+            <input type="hidden" name="red_list" value='{{ results["analysis"]["red_list"]|tojson|safe }}'>
+            <input type="hidden" name="allergens" value='{{ results["analysis"]["allergens"]|tojson|safe }}'>
+            <input type="hidden" name="concerns" value='{{ results["analysis"]["concerns"]|tojson|safe }}'>
+            <input type="hidden" name="primary_category" value='{{ results["analysis"]["primary_category"] }}'>
+
+            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Get An Alternative Product
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<footer class="footer bg-gray-800 text-white mt-8">
+    <div class="footer-content container mx-auto py-4 flex flex-col items-center space-y-4">
+        <div class="social-media flex space-x-4">
+            <a href="#"><img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/x.png') }}" alt="X" class="social-icon"></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="social-icon"></a>
+        </div>
+        <img src="{{ url_for('static', filename='img/white Logo.png') }}" alt="Company Logo" class="footer-logo">
+        <div class="footer-buttons flex space-x-4">
+            <button class="about-us-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">About Us</button>
+            <button class="contact-us-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Contact Us</button>
+        </div>
+        <p class="copyright text-sm">© 2025 Allergenix. All rights reserved. | Country: Sri Lanka</p>
+    </div>
+</footer>
+
+<!-- Include JavaScript -->
+<script src="{{ url_for('static', filename='js/component_4_scripts.js') }}"></script>
+</body>
+</html>
