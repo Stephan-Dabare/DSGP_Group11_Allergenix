@@ -1,0 +1,228 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 50;
+}
+
+.logo {
+    height: 39px;
+    width: 144px;
+    margin-left: 50px;
+}
+
+.nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #3b82f6;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.login-button, .signup-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.login-button {
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+}
+
+.login-button:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.signup-button {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.signup-button:hover {
+    background-color: #2563eb;
+}
+
+/* Main Container */
+.container {
+    margin-top: 100px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Grid Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Left and Right sections */
+.left-section, .right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between boxes */
+}
+
+/* Box Styling */
+.box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+}
+
+.box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.box h2 {
+    color: #1f2937;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.box p, .box ul {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Chart Box */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 400px;
+    padding: 15px;
+}
+
+#allergenChart {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* Single column layout */
+    }
+
+    .grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box {
+        width: 90%;
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: #242d4f;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 30px;
+    height: auto;
+    margin: 0 15px;
+}
+
+.footer-logo {
+    width: 160px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.footer-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.about-us-button, .contact-us-button {
+    border-color: #3b82f6;
+    border-width: 1px;
+    color: white;
+    padding: 8px;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.about-us-button:hover, .contact-us-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+}
+
+
+
+.back-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+    background-color: white;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    margin: 50px 0;
+}
+
+.back-button:hover {
+    background-color: #3b82f6;
+    color: white;
+    transform: scale(1.05);
+}

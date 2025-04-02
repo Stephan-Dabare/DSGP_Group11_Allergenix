@@ -1,0 +1,608 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideLeft {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideRight {
+    from { transform: translateX(50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.animate-slide-down {
+    animation: slideDown 1s ease-in-out;
+}
+
+.animate-slide-left {
+    animation: slideLeft 1s ease-in-out;
+}
+
+.animate-slide-right {
+    animation: slideRight 1s ease-in-out;
+}
+
+/* Responsive Design Tweaks */
+@media (max-width: 768px) {
+    header nav {
+        display: none;
+    }
+
+    .animate-slide-left, .animate-slide-right {
+        animation: fadeIn 1s ease-in-out;
+    }
+}
+
+
+
+
+/* ========================================= HEADER CONTAINER =================================================== */
+.header {
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 16px 30px;
+    position: fixed;  /* Makes the header fixed */
+    top: 0;           /* Sticks it to the top */
+    left: 0;
+    z-index: 1000;    /* Ensures it's above other elements */
+}
+
+
+/* TOP BAR: Sign In/Login on Right, Logo in Center */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+/* LOGO CONTAINER */
+.logo-container {
+    position: absolute;
+    text-align: center;
+
+}
+
+.logo {
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
+
+
+
+
+/* SIGN IN/LOGIN */
+.header-icons {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+}
+
+.header-icons a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover effect for login/sign in */
+.header-icons a:hover {
+    color: #0073e6; /* Blue hover effect */
+}
+
+/* NAVIGATION BAR */
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: -16px; /* Moves the navigation links up */
+}
+
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    transition: color 0.3s ease-in-out;
+}
+
+
+/* Hover effects for navigation links */
+.nav-links a:hover {
+    color: #0073e6; /* Blue text color */
+}
+
+.nav-links a::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #0073e6;
+    transition: width 0.3s ease-in-out;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+
+
+/* MENU TOGGLE BUTTON */
+.menu-toggle {
+    display: none; /* Hidden by default on larger screens */
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    right: 20px; /* Places it on the right */
+    top: 50%;
+    transform: translateY(-50%); /* Centers it vertically */
+}
+
+/* SHOW MENU BUTTON IN SMALL SCREENS */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+        position: absolute;
+        right: 1%; /* Adjust to move it further right */
+        top: 50%;
+        transform: translateY(-50%); /* Centers it vertically */
+    }
+
+
+    .header-icons {
+        margin-right: 10%;
+    }
+
+
+    .nav-links {
+        display: none; /* Hide nav links initially */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 10px 0;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.show {
+        display: flex; /* Show when toggled */
+    }
+
+    .nav-links a {
+        padding: 10px 0;
+        display: block;
+    }
+}
+
+
+/* ========================================================================================================== */
+
+
+
+/*Hero section*/
+
+.hero-section-wrapper {
+    background-color: #eef5ff; /* Light background */
+    padding-right: 50px;
+    padding-left: 50px;
+    border-radius: 30px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-top: 120px;
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+.hero-section-wrapper {
+    transition: transform 0.5s ease-in-out;
+}
+
+.hero-section-wrapper:hover {
+    transform: scale(1.01);
+}
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .hero-section {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.hero-left, .hero-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .hero-left, .hero-right {
+        width: 50%;
+    }
+}
+
+.hero-logo {
+    height: auto;
+    width: 180px;
+    margin-bottom: 0.7rem;
+}
+
+.hero-title {
+    color: #242d4f;
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+
+.hero-description {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+.highlight-allergen {
+    color: #242d4f; /* Example color */
+    font-family: "Brush Script MT";
+    font-size: 2.5rem;
+}
+
+.hero-description2 {
+    font-size: 1.125rem;
+    color: #242d4f;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.get-started-button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.get-started-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+}
+
+/*About section*/
+
+.about-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin: 34px;
+}
+
+.box1, .box2, .box3 {
+    background-color: #fafdff; /* Light background */
+    padding: 50px;
+    border-radius: 30px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    flex: 1;
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.box1 {
+    transition: transform 0.5s ease-in-out;
+}
+
+.box1:hover {
+    transform: scale(1.05);
+}
+
+.box2 {
+    transition: transform 0.5s ease-in-out;
+}
+
+.box2:hover {
+    transform: scale(1.05);
+}
+
+.box3 {
+    transition: transform 0.5s ease-in-out;
+}
+
+.box3:hover {
+    transform: scale(1.05);
+}
+
+.box-title{
+    color: #242d4f;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+
+@media (max-width: 768px) {
+    .about-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-section div {
+        width: 90%;
+    }
+}
+
+
+/*Food allergen section*/
+.food-section-wrapper {
+    background-color: #fafdff; /* Light background */
+    padding-right: 50px;
+    padding-left: 50px;
+    border-radius: 30px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 50px;
+}
+
+.food-section-wrapper {
+    transition: transform 0.5s ease-in-out;
+}
+
+.food-section-wrapper:hover {
+    transform: scale(1.01);
+}
+
+.food-allergen-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .food-allergen-section {
+        flex-direction: row;
+    }
+
+    .cosmetic-allergen-section {
+        flex-direction: row-reverse;
+    }
+}
+
+.food-allergen-image, .cosmetic-allergen-image {
+    width: 40%;
+}
+
+.cosmetic-allergen-image {
+    margin-left: 2.5rem; /* Add space between the image and the content */
+}
+
+.food-allergen-image {
+    margin-right: 2.5rem; /* Add space between the image and the content */
+}
+
+
+.food-allergen-content{
+    width: 100%;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .food-allergen-content {
+        width: 50%;
+        text-align: left;
+    }
+}
+
+
+/* Cosmetic allergen section */
+.cosmetic-section-wrapper {
+    background-color: #fafdff; /* Light background */
+    padding-right: 50px;
+    padding-left: 50px;
+    border-radius: 30px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 50px;
+}
+
+.cosmetic-section-wrapper {
+    transition: transform 0.5s ease-in-out;
+}
+
+.cosmetic-section-wrapper:hover {
+    transform: scale(1.01);
+}
+
+.cosmetic-allergen-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .cosmetic-allergen-section {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+}
+
+.cosmetic-allergen-content {
+    width: 100%;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .cosmetic-allergen-content {
+        width: 50%;
+        text-align: right;
+    }
+}
+
+.section-title {
+    color: #242d4f;
+    font-size: 1.875rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.section-description {
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+.learn-more-button, .discover-more-button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.learn-more-button:hover, .discover-more-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+}
+
+
+/*Footer*/
+/* Footer */
+.footer {
+    background-color: #242d4f;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 30px; /* Increase the size */
+    height: auto; /* Increase the size */
+    margin: 0 15px; /* Adjust spacing */
+}
+
+.footer-logo {
+    width: 160px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.footer-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.about-us-button, .contact-us-button {
+    border-color: #3b82f6;
+    border-width: 1px;
+    color: white;
+    padding: 8px;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 7px;
+
+}
+
+.about-us-button:hover, .contact-us-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+}
+
+.copyright {
+    margin-top: 10px;
+}
+
+/* Additional styles for recommendation page */
+.category-option label {
+    transition: all 0.2s ease;
+}
+
+.category-checkbox:checked + label {
+    background-color: #dbeafe;
+    border-color: #3b82f6;
+    border-width: 2px;
+}
+
+/* Product recommendation cards */
+.recommendation-card {
+    transition: transform 0.2s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+}
+
+
+
+/* updates */
+body {
+    background: #ffffff;
+    padding-top: 45px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
