@@ -27,7 +27,9 @@ Allergenix reduces the risk of allergic reactions by enabling users to:
 ## Feature Prototype
 
 Here’s a preview of our system’s feature prototype, which outlines the overall workflow from image upload to allergen detection and alternative product suggestions.
-![Feature Prototype]([https://terabox-sharing-link-to-image.png](https://imgur.com/a/NIqk4nx))
+<a href="https://terabox.com/s/1SYQUXbpWoq6oQhb1r5MmMA" target="_blank">
+  <img src="https://terabox.com/thumbnail/1SYQUXbpWoq6oQhb1r5MmMA" alt="Feature Prototype" width="600">
+</a>
 
 ## Setup Instructions for Allergenix Application
 
@@ -43,12 +45,7 @@ Due to file size limitations, the required model files are hosted externally. Pl
 
 3. **Copy the extracted folders** into the `model` directory of this repository so that the structure looks like this:
 
-model/
-├── 1-Category-Prediction-BERT-Model/
-├── 2-Allergen-Detection-BERT-Model/
-├── 3-Tokenizer/
-├── component_3_models/
-└── And other remaining files and folders
+model/ ├── 1-Category-Prediction-BERT-Model/ ├── 2-Allergen-Detection-BERT-Model/ ├── 3-Tokenizer/ └── component_3_models/ └── And other remaining files and folders
 
 ### Step 2: Run the Application
 
