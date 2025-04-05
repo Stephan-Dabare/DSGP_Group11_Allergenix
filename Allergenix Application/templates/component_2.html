@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergen Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/component_2_styles.css') }}">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <img src="{{ url_for('static', filename='img/Logo_2_No_Bg.png') }}" alt="Allergenix Logo" class="logo">
+        <nav class="nav">
+            <a onclick="location.href='/'" class="nav-link">Home</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Features</a>
+            <a href="#" class="nav-link">Contact</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login-button">Login</button>
+            <button class="signup-button">Sign Up</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="grid-container">
+            <!-- Left Side -->
+            <div class="left-section">
+                <div class="box">
+                    <h2>Detected Allergens</h2>
+                    <ul>
+                        {% for allergen in allergens %}
+                        <li>{{ allergen|capitalize }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="box">
+                    <h2>Recommended Alternative</h2>
+                    <p>{{ alternative }}</p>
+                </div>
+
+                <div class="box">
+                    <h2>Predicted Category</h2>
+                    <p>{{ category }}</p>
+                </div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="right-section">
+                <div class="box chart-container">
+                    <canvas id="allergenChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="back-button" onclick="location.href='/component_1'">Back</button>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="social-media">
+                <a href="#"><img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn" class="social-icon"></a>
+                <a href="#"><img src="{{ url_for('static', filename='img/x.png') }}" alt="X" class="social-icon"></a>
+                <a href="#"><img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="social-icon"></a>
+            </div>
+            <img src="{{ url_for('static', filename='img/whiteLogo.png') }}" alt="Company Logo" class="footer-logo">
+            <div class="footer-buttons">
+                <button class="about-us-button">About Us</button>
+                <button class="contact-us-button">Contact Us</button>
+            </div>
+            <p>© 2025 Allergenix. All rights reserved. | Country: Sri Lanka</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='scripts/component_2_scripts.js') }}"></script>
+        <script>
+        // Pie Chart Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('allergenChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Allergens', 'Non-Allergens'],
+                    datasets: [{
+                        data: [{{ allergen_count }}, {{ normal_count }}],
+                        backgroundColor: ['#FF6384', '#36A2EB'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Ingredient Composition',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
