@@ -44,7 +44,12 @@ Due to file size limitations, the required model files are hosted externally. Pl
 3. **Copy the extracted folders** into the `model` directory of this repository so that the structure looks like this:
 
 ```
-model/ ├── 1-Category-Prediction-BERT-Model/ ├── 2-Allergen-Detection-BERT-Model/ ├── 3-Tokenizer/ └── component_3_models/ └── And other remaining files and folders
+model/
+├── 1-Category-Prediction-BERT-Model/
+├── 2-Allergen-Detection-BERT-Model/
+├── 3-Tokenizer/
+├── component_3_models/
+└── And other remaining files and folders
 ```
 
 ### Step 2: Run the Application
