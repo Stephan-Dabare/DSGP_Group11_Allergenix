@@ -27,9 +27,7 @@ Allergenix reduces the risk of allergic reactions by enabling users to:
 ## Feature Prototype
 
 Here’s a preview of our system’s feature prototype, which outlines the overall workflow from image upload to allergen detection and alternative product suggestions.
-<a href="https://terabox.com/s/1SYQUXbpWoq6oQhb1r5MmMA" target="_blank">
-  <img src="https://terabox.com/thumbnail/1SYQUXbpWoq6oQhb1r5MmMA" alt="Feature Prototype" width="600">
-</a>
+![Feature Prototype](https://private-user-images.githubusercontent.com/165551198/430623332-ddc1d6d6-143c-4461-ba20-140b52809b81.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDM4NjE1MTEsIm5iZiI6MTc0Mzg2MTIxMSwicGF0aCI6Ii8xNjU1NTExOTgvNDMwNjIzMzMyLWRkYzFkNmQ2LTE0M2MtNDQ2MS1iYTIwLTE0MGI1MjgwOWI4MS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNDA1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDQwNVQxMzUzMzFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04MjIyNDEyMjJiZGFkMmUyN2E4Y2YyZjczOTk2YjZjZjNkY2MzMTJiN2E4ZjY0MGY4NWY5YjIzYzJjOTM5MDY4JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.jaRQTKhcnScfrcKv5eA1XAsnpEc2a0oNtUErjBp-OwA)
 
 ## Setup Instructions for Allergenix Application
 
@@ -45,7 +43,9 @@ Due to file size limitations, the required model files are hosted externally. Pl
 
 3. **Copy the extracted folders** into the `model` directory of this repository so that the structure looks like this:
 
+```
 model/ ├── 1-Category-Prediction-BERT-Model/ ├── 2-Allergen-Detection-BERT-Model/ ├── 3-Tokenizer/ └── component_3_models/ └── And other remaining files and folders
+```
 
 ### Step 2: Run the Application
 
